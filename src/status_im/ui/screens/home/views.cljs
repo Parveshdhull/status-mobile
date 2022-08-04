@@ -29,7 +29,8 @@
             [status-im.ui.components.chat-icon.screen :as chat-icon.screen]
             [status-im.ui.components.chat-icon.styles :as chat-icon.styles]
             [quo2.foundations.colors :as quo2.colors]
-            [quo2.components.button :as quo2.button])
+            [quo2.components.button :as quo2.button]
+            [quo2.components.information-box :as information-box])
   (:require-macros [status-im.utils.views :as views]))
 
 (defn home-tooltip-view []
@@ -187,6 +188,17 @@
                                         [home-tooltip-view]
                                         [react/view {:height 68}])}])))
 
+(defn ens-banner-view []
+  [information-box/information-box
+   {:type            :informative
+    :closable?       true
+    :icon            :main-icons/info
+    :style           {:margin 20}
+    :button-label    "Open dApp"
+    :on-button-press #(re-frame/dispatch [:browser.ui/open-url "https://ens-collect.status.im/"])
+    :id              :ens-banner-3}
+   "If you registered a stateofus.eth name you might be eligible to collect $ENS"])
+
 (views/defview communities-and-chats-old []
   (views/letsubs [{:keys [items search-filter]} [:home-items]
                   hide-home-tooltip? [:hide-home-tooltip?]]
@@ -205,6 +217,7 @@
         :header                       [:<>
                                        (when (or (seq items) @search-active? (seq search-filter))
                                          [search-input-wrapper-old search-filter (empty? items)])
+                                       [ens-banner-view]
                                        (when (and (empty? items)
                                                   (or @search-active? (seq search-filter)))
                                          [start-suggestion search-filter])]
