@@ -36,6 +36,7 @@
             [status-im.navigation :as navigation]
             [status-im.signing.eip1559 :as eip1559]
             [status-im.data-store.chats :as data-store.chats]
+            [status-im.switcher.core :as switcher]
             [status-im.data-store.visibility-status-updates :as visibility-status-updates-store]
             [status-im.ui.components.react :as react]
             [status-im.utils.platform :as platform]
@@ -454,6 +455,7 @@
               (multiaccounts/get-profile-picture)
               (multiaccounts/switch-preview-privacy-mode-flag)
               (link-preview/request-link-preview-whitelist)
+              (switcher/load-switcher-cards)
               (visibility-status-updates-store/fetch-visibility-status-updates-rpc))))
 
 (defn get-new-auth-method [auth-method save-password?]

@@ -1,8 +1,8 @@
 (ns status-im.switcher.switcher-container
   (:require [quo.react-native :as rn]
-            status-im.switcher.cards.messaging-card
             [status-im.switcher.styles :as styles]
             [status-im.utils.handlers :refer [<sub]]
+            [status-im.switcher.cards.switcher-card :as switcher-card]
             [status-im.switcher.cards.messaging-card :as messaging-card]))
 
 ;; TODO - use something like this to avoid multiple renders etc.
@@ -24,7 +24,7 @@
     [rn/view {:style (styles/switcher-switch-screen)}
      [rn/flat-list {:width                     352
                     :data                      cards
-                    :render-fn                 messaging-card/card
+                    :render-fn                 switcher-card/card-view
                     :num-columns               2
                     :key-fn                    str}]]))
 

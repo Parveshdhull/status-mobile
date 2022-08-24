@@ -28,7 +28,7 @@
    :height           172
    :border-radius    16
    :margin           8
-   :background-color (get-color :messaging-card-container-background-color)})
+   :background-color (get-color :messaging-card-secondary-container-background-color)})
 
 (defn messaging-card-secondary-container []
   {:width            160
@@ -40,7 +40,13 @@
 
 (defn messaging-card-title []
   {:position          :absolute
-   :top               32
+   :top               28
+   :margin-horizontal 12
+   :color             (get-color :messaging-card-title-color)})
+
+(defn communities-home-card-title []
+  {:position          :absolute
+   :top               10
    :margin-horizontal 12
    :color             (get-color :messaging-card-title-color)})
 
@@ -51,9 +57,19 @@
    :ellipsize-mode  :tail
    :style           (messaging-card-title)})
 
+(defn communities-home-card-title-props []
+  (merge (messaging-card-title-props)
+         {:style (communities-home-card-title)}))
+
 (defn messaging-card-subtitle []
   {:position          :absolute
    :top               54
+   :margin-horizontal 12
+   :color             (get-color :messaging-card-subtitle-color)})
+
+(defn communities-home-card-subtitle []
+  {:position          :absolute
+   :top               32
    :margin-horizontal 12
    :color             (get-color :messaging-card-subtitle-color)})
 
@@ -61,6 +77,11 @@
   {:size            :paragraph-2
    :weight          :medium
    :style           (messaging-card-subtitle)})
+
+(defn communities-home-card-subtitle-props []
+  {:size            :paragraph-2
+   :weight          :medium
+   :style           (communities-home-card-subtitle)})
 
 (defn messaging-card-details-container []
   {:position          :absolute

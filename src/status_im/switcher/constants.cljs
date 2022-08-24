@@ -72,3 +72,8 @@
    :chats-stack       :chats-tab-opacity
    :wallet-stack      :wallet-tab-opacity
    :browser-stack     :browser-tab-opacity})
+
+(def default-cards
+  {:communities-card {:type  :home-card
+                      :id    :communities-card
+                      :clock 4}})
