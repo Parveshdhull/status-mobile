@@ -54,7 +54,7 @@
         [switcher-card/card (:type @state) @state]]])))
 
 (defn preview-switcher-cards []
-  [rn/view {:background-color (colors/theme-colors colors/white colors/neutral-90)
+  [rn/view {:background-color colors/neutral-80-opa-80
             :flex             1}
    [rn/flat-list {:flex                      1
                   :keyboardShouldPersistTaps :always

@@ -70,14 +70,14 @@
   {:position         :absolute
    :right            8
    :top              8
-   :background-color (:close-button-bg-color colors-map)
-   :icon-color       (:close-button-icon-color colors-map)})
+   :background-color (:close-button-bg-color colors-map)})
 
 (defn close-button-props [on-press]
   {:size     24
    :type     :grey
    :icon     true
-   :on-press on-press
+   :on-press on-press   
+   :color       (:close-button-icon-color colors-map)
    :style    (close-button)})
 
 (defn avatar-container []
