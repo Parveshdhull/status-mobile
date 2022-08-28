@@ -6,7 +6,10 @@
             ["@react-native-community/hooks" :as hooks]
             ["react-native-navigation" :refer (Navigation)]
             ["rn-emoji-keyboard" :refer (EmojiKeyboard)]
+            ["react-native-hole-view" :refer (RNHoleView)]
             ["react-native-draggable-flatlist" :default DraggableFlatList]))
+
+(def hole-view (reagent/adapt-react-class RNHoleView))
 
 (def rn-draggable-flatlist (reagent/adapt-react-class DraggableFlatList))
 
