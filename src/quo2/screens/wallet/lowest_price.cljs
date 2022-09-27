@@ -1,8 +1,8 @@
-(ns quo2.screens.info.lowest-price
+(ns quo2.screens.wallet.lowest-price
   (:require [quo2.foundations.colors :as colors]
             [quo.react-native :as rn]
             [quo.previews.preview :as preview]
-            [quo2.components.info.lowest-price :as quo2]
+            [quo2.core :as quo2]
             [reagent.core :as reagent]))
 
 (def descriptor [{:label "Top value"

@@ -17,10 +17,10 @@
             [quo2.screens.community.community-card-view :as community-card]
             [quo2.screens.dividers.divider-label :as divider-label]
             [quo2.screens.dividers.new-messages :as new-messages]
-            [quo2.screens.list-items.dropdown :as dropdown]
+            [quo2.screens.dropdowns.dropdown :as dropdown]
             [quo2.screens.info.info-message :as info-message]
             [quo2.screens.info.information-box :as information-box]
-            [quo2.screens.info.lowest-price :as lowest-price]
+            [quo2.screens.wallet.lowest-price :as lowest-price]
             [quo2.screens.list-items.preview-lists :as preview-lists]
             [quo2.screens.list-items.channel :as channel]
             [quo2.screens.markdown.text :as text]
@@ -79,10 +79,7 @@
            :component info-message/preview-info-message}
           {:name      :information-box
            :insets    {:top false}
-           :component information-box/preview-information-box}
-          {:name      :lowest-price
-           :insets    {:top false}
-           :component lowest-price/preview-lowest-price}]
+           :component information-box/preview-information-box}]
    :list-items [{:name      :channel
                  :insets    {:top false}
                  :component channel/preview-channel}
@@ -131,7 +128,10 @@
           {:name      :token-tag
            :insets    {:top false}
            :component token-tag/preview-token-tag}]
-   :wallet [{:name      :token-overview
+   :wallet [{:name      :lowest-price
+             :insets    {:top false}
+             :component lowest-price/preview-lowest-price}
+            {:name      :token-overview
              :insets    {:top false}
              :component token-overview/preview-token-overview}]})
 

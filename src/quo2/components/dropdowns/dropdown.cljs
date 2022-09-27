@@ -1,4 +1,4 @@
-(ns quo2.components.list-items.dropdown
+(ns quo2.components.dropdowns.dropdown
   (:require [quo.react-native :as rn]
             [quo2.components.icon :as icons]
             [quo2.components.markdown.text :as text]
