@@ -1,57 +1,27 @@
 (ns status-im.switcher.constants
   (:require [quo.react-native :as rn]
+            [reagent.core :as reagent]
             [status-im.utils.handlers :refer [<sub]]
             [status-im.utils.platform :as platform]))
 
 ;; For translucent status bar(android), dimensions/window also includes status bar's height,
 ;; this offset is used for correctly calculating switcher position
 (def switcher-height-offset
-  (if platform/android? (:status-bar-height @rn/navigation-const) 0))
+  (if platform/android? (max (:status-bar-height @rn/navigation-const) 24) 0))
+;; todo (maybe change into) (max switcher-height-offset 24)
 
-;; extra height of switcher container for show/peek hidden cards while opening animation
-(def switcher-container-height-padding 100)
+(print switcher-height-offset)
 
-(def switcher-button-radius 24)
+(defn bottom-tabs-container-height []
+  (if platform/android? 57 82))
 
-(def switcher-button-size
-  (* switcher-button-radius 2))
-
-(def switcher-pressed-scale 0.9)
-
-(def switcher-pressed-radius
-  (* switcher-pressed-scale switcher-button-radius))
-
-(def switcher-pressed-size
-  (* 2 switcher-pressed-radius))
-
-(def switcher-bottom-positions
-  {:android
-   {:home-stack 15
-    :chat       140}
-   :ios
-   {:home-stack 40
-    :chat       140}})
-
-(defn switcher-bottom-position [view-id]
-  (get-in
-   switcher-bottom-positions
-   [(keyword platform/os) view-id]))
-
-(defn switcher-pressed-bottom-position [view-id]
-  (+
-   (get-in
-    switcher-bottom-positions
-    [(keyword platform/os) view-id])
-   (- switcher-button-radius switcher-pressed-radius)))
-
-;; TODO(parvesh) - use different height for android and ios(Confirm from Design)
-(defn bottom-tabs-height []
-  (if platform/android? 55 80))
+(defn bottom-tabs-extended-container-height []
+  (if platform/android? 90 120))
 
 (defn dimensions []
   (let [{:keys [width height]} (<sub [:dimensions/window])]
     {:width  width
-     :height (+ height switcher-height-offset)}))
+     :height height}))
 
 (def stacks-ids [:communities-stack :chats-stack :wallet-stack :browser-stack])
 
@@ -67,8 +37,10 @@
    :wallet-stack      :wallet-stack-pointer
    :browser-stack     :browser-stack-pointer})
 
-(def tabs-opacity-keywords
-  {:communities-stack :communities-tab-opacity
-   :chats-stack       :chats-tab-opacity
-   :wallet-stack      :wallet-tab-opacity
-   :browser-stack     :browser-tab-opacity})
+(def tabs-icon-color-keywords
+  {:communities-stack :communities-tab-icon-color
+   :chats-stack       :chats-tab-icon-opacity
+   :wallet-stack      :wallet-tab-icon-opacity
+   :browser-stack     :browser-tab-icon-opacity})
+
+(def pass-through? (reagent/atom false))

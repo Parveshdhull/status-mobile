@@ -1809,5 +1809,7 @@
     "replies": "Replies",
     "identity-verification": "Identity verification",
     "membership": "Membership",
-    "jump-to": "Jump to"
+    "jump-to": "Jump to",
+    "shell-placeholder-title": "Your apps will run here",
+    "shell-placeholder-subtitle": "Open tabs of your communities, messages,\nwallet account and browser windows"
 }

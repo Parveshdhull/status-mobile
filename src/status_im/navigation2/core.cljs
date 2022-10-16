@@ -55,7 +55,7 @@
   (let [{:keys [options]} (get views/screens comp)]
     (reset! nav2-utils/container-stack-view-id comp)
     (.push Navigation
-           (name :home-stack)
+           (name :shell-stack)
            (clj->js {:stack {:id       comp
                              :children [{:component {:id      comp
                                                      :name    comp

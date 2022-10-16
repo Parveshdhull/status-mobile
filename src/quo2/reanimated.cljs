@@ -2,6 +2,7 @@
   (:require ["react-native" :as rn]
             [reagent.core :as reagent]
             [clojure.string :as string]
+            [quo2.components.icon :as icon]
             ["react-native-reanimated" :default reanimated
              :refer (useSharedValue useAnimatedStyle withTiming withDelay withSpring Easing Keyframe)]))
 

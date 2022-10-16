@@ -5,7 +5,7 @@
             [status-im.utils.datetime :as datetime]
             [status-im.async-storage.core :as async-storage]))
 
-(def parent-stack (atom :home-stack))
+(def parent-stack (atom :shell-stack))
 
 (fx/defn toggle-new-ui
   {:events [:toggle-new-ui]}
@@ -13,7 +13,7 @@
   (swap! config/new-ui-enabled? not)
   (reloader/reload)
   {:new-ui/reset-bottom-tabs nil
-   :dispatch                 [:init-root (if @config/new-ui-enabled? :home-stack :chat-stack)]
+   :dispatch                 [:init-root (if @config/new-ui-enabled? :shell-stack :chat-stack)]
    ::async-storage/set!      {:new-ui-enabled? @config/new-ui-enabled?}})
 
 (fx/defn reload-new-ui
@@ -38,7 +38,7 @@
   [_ modal]
   {:close-modal-fx-nav2 modal})
 
-(defn navigate-from-home-stack [go-to-view-id id db]
+(defn navigate-from-shell-stack [go-to-view-id id db]
   (reset! parent-stack go-to-view-id)
   {:navigate-to-fx-nav2 [go-to-view-id id]
    :db (assoc-in db [:navigation2/navigation2-stacks id] {:type  go-to-view-id
@@ -61,8 +61,8 @@
     (if from-switcher?
       (navigate-from-switcher go-to-view-id id db from-home?)
       (if from-home?
-        (navigate-from-home-stack go-to-view-id id db)
+        (navigate-from-shell-stack go-to-view-id id db)
         ;; TODO(parvesh) - new stacks created from other screens should be stacked on current stack, instead of creating new entry
-        (navigate-from-home-stack go-to-view-id id db)))))
+        (navigate-from-shell-stack go-to-view-id id db)))))
 
 

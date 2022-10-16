@@ -45,7 +45,7 @@
   (let [button-common-props (get-button-common-props type)]
     [rn/view {:style (merge
                       {:height 56
-                       :flex   1}
+                       :flex   -1}
                       style)}
    ;; Left Section
      [rn/touchable-without-feedback {:on-press open-profile}

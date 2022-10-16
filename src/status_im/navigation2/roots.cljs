@@ -5,16 +5,16 @@
 
 (defn status-bar-options []
   (if platform/android?
-    {:navigationBar {:backgroundColor colors/neutral-80}
+    {:navigationBar {:backgroundColor colors/neutral-100}
      :statusBar     {:backgroundColor :transparent
-                     :style           (if (theme/dark?) :light :dark)
+                     :style           :dark ;; todo - make this dynamic
                      :drawBehind      true}}
-    {:statusBar {:style (if (theme/dark?) :light :dark)}}))
+    {:statusBar {:style :light}}))
 
 (defn roots []
-  {:home-stack
+  {:shell-stack
    {:root
-    {:stack {:id       :home-stack
+    {:stack {:id       :shell-stack
              :children [{:component {:name    :chat-stack
                                      :id      :chat-stack
                                      :options (merge (status-bar-options)
