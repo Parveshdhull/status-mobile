@@ -84,7 +84,8 @@
     :link (i18n/label :t/external-link)
     :code (i18n/label :t/code-snippet)
     :channel (i18n/label :t/community-channel)
-    :community-info (i18n/label :t/community)))
+    :community-info (i18n/label :t/community)
+    (i18n/label :t/community)))
 
 ;; Screens Card
 (defn screens-card [{:keys [avatar-params title type customization-color
@@ -100,7 +101,7 @@
        [text/text (styles/title-props) title]
        [text/text (styles/subtitle-props) (subtitle content)]
        [bottom-container (merge {:color-50 color-50 :color-60 color-60} content)]]
-      (when avatar
+      (when avatar-params
         [rn/view {:style (styles/avatar-container)}
          [avatar avatar-params type customization-color]])
       [button/button (styles/close-button-props on-close) :i/close]]]))
@@ -123,7 +124,7 @@
 (defn communities-discover [_]
   [:<>])
 
-(defn card [type data]
+(defn card [{:keys [type] :as data}]
   (case type
     :communities-discover [communities-discover data] ;; Home Card
     :messaging            [screens-card data]         ;; Screens Card

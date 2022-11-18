@@ -17,6 +17,7 @@
             status-im.subs.onboarding
             status-im.subs.pairing
             status-im.subs.search
+            status-im.subs.shell
             status-im.subs.stickers
             status-im.subs.wallet.signing
             status-im.subs.wallet.transactions

@@ -10,7 +10,7 @@
 (defn bottom-tabs-extended-container-height []
   (if platform/android? 90 120))
 
-(def status-bar-offset
+(defn status-bar-offset []
   (if platform/android? (.-currentHeight ^js rn/status-bar) 0))
 
 ;; status bar height is not included in : the dimensions/window for devices with a notch
@@ -18,8 +18,8 @@
 (defn dimensions []
   (let [{:keys [width height]} (<sub [:dimensions/window])]
     {:width  width
-     :height (if (> status-bar-offset 28)
-               (+ height status-bar-offset)
+     :height (if (> (status-bar-offset) 28)
+               (+ height (status-bar-offset))
                height)}))
 
 (def stacks-ids [:communities-stack :chats-stack :wallet-stack :browser-stack])

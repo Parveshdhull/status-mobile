@@ -105,16 +105,17 @@
     :community-info {:type :kicked}
     (:audio :community :link :code) nil))
 
-(defn get-mock-data [data]
+(defn get-mock-data [{:keys [type] :as data}]
   (merge
    data
-   {:banner  (when (:banner? data) banner)
+   {:type    type
+    :banner  (when (:banner? data) banner)
     :content {:new-notifications?     (:new-notifications? data)
               :notification-indicator (:notification-indicator data)
               :counter-label          (:counter-label data)
               :content-type           (:content-type data)
               :data                   (get-mock-content data)}}
-   (case (:type data)
+   (case type
      :messaging       {:avatar-params {:full-name (:title data)}}
      :group-messaging {}
      :community-card  {:avatar-params community-avatar}
@@ -137,7 +138,7 @@
         [preview/customizer state descriptor]
         [rn/view {:padding-vertical 60
                   :align-items      :center}
-         [switcher-cards/card (:type @state) (get-mock-data @state)]]]])))
+         [switcher-cards/card (get-mock-data @state)]]]])))
 
 (defn preview-switcher-cards []
   [rn/view {:background-color colors/neutral-100

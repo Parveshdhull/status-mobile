@@ -91,11 +91,16 @@
    :style          (close-button)})
 
 (defn avatar-container []
-  {:width    48
-   :height   48
-   :left     12
-   :top      12
-   :position :absolute})
+  {:width           48
+   :height          48
+   :left            12
+   :top             12
+   :border-radius   26
+   :border-width    26
+   :border-color    colors/neutral-95
+   :justify-content :center
+   :align-items     :center
+   :position        :absolute})
 
 (defn unread-dot [background-color]
   {:width            8
