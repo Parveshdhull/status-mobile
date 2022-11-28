@@ -265,12 +265,12 @@
 (fx/defn navigate-to-chat-nav2
   "Takes coeffects map and chat-id, returns effects necessary for navigation and preloading data"
   {:events [:chat.ui/navigate-to-chat-nav2]}
-  [{db :db :as cofx} chat-id from-switcher?]
+  [{db :db :as cofx} chat-id from-shell?]
   (fx/merge cofx
             {:db (assoc db :current-chat-id chat-id)}
             (offload-messages chat-id)
             (preload-chat-data chat-id)
-            (navigation/navigate-to-nav2 :chat chat-id nil from-switcher?)))
+            (navigation/navigate-to-nav2 :chat chat-id from-shell?)))
 
 (fx/defn handle-clear-history-response
   {:events [::history-cleared]}

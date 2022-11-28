@@ -91,11 +91,16 @@
    :style          (close-button)})
 
 (defn avatar-container []
-  {:width    48
-   :height   48
-   :left     12
-   :top      12
-   :position :absolute})
+  {:width           48
+   :height          48
+   :left            12
+   :top             12
+   :border-radius   26
+   :border-width    26
+   :border-color    colors/neutral-95
+   :justify-content :center
+   :align-items     :center
+   :position        :absolute})
 
 (defn unread-dot [background-color]
   {:width            8
@@ -114,10 +119,16 @@
    :height        24
    :border-radius 8})
 
-(defn community-avatar []
-  {:width         48
-   :height        48
-   :border-radius 24})
+(defn community-avatar [customization-color]
+  {:width            48
+   :height           48
+   :border-radius    24
+   ;; TODO - Update to fall back community avatar once designs are available
+   :justify-content  :center
+   :align-items      :center
+   :background-color (colors/custom-color
+                      (or customization-color :primary)
+                      60)})
 
 (defn community-channel []
   {:margin-left 8

@@ -30,8 +30,15 @@ export function applyAnimationsToStyle(animations, style) {
   };
 };
 
-// Switcher Worklets
+// Shell Worklets
 
+// Home Stack States
+const CLOSE_WITH_ANIMATION = 0;
+const OPEN_WITH_ANIMATION = 1;
+const CLOSE_WITHOUT_ANIMATION = 3;
+const OPEN_WITHOUT_ANIMATION = 4;
+
+// Derived Values
 export function stackOpacity (stackId, selectedStackId) {
   return useDerivedValue(
     function () {
@@ -50,13 +57,16 @@ export function stackPointer (stackId, selectedStackId) {
   );
 }
 
-export function bottomTabIconColor (stackId, selectedStackId, homeStackOpen,
+export function bottomTabIconColor (stackId, selectedStackId, homeStackState,
 				    passThrough, selectedTabColor, defaultColor,
 				    passThroughColor) {
   return useDerivedValue(
     function () {
       'worklet'
-      if (selectedStackId.value == stackId && homeStackOpen.value){
+      var homeStackStateValue = homeStackState.value;
+      if (selectedStackId.value == stackId &&
+	  (homeStackStateValue == OPEN_WITH_ANIMATION ||
+	   homeStackStateValue == OPEN_WITHOUT_ANIMATION)){
 	return selectedTabColor;
       }
       else if (passThrough.value){
@@ -69,6 +79,28 @@ export function bottomTabIconColor (stackId, selectedStackId, homeStackOpen,
   );
 }
 
+export function bottomTabsHeight(homeStackState, height, extendedHeight) {
+  return useDerivedValue(
+    function () {
+      'worklet'
+      switch (homeStackState.value) {
+      case OPEN_WITH_ANIMATION:
+	return withTiming(extendedHeight, defaultDurationAndEasing);
+	break;
+      case CLOSE_WITH_ANIMATION:
+	return withTiming(height, defaultDurationAndEasing);
+	break;
+      case OPEN_WITHOUT_ANIMATION:
+	return extendedHeight;
+	break;
+      case CLOSE_WITHOUT_ANIMATION:
+	return height;
+	break;
+      }
+    }
+  )
+}
+
 
 // Home Stack
 
@@ -79,34 +111,69 @@ const defaultDurationAndEasing = {
   easing: Easing.bezier(0, 0, 1, 1),
 }
 
-export function homeStackOpacity (homeStackOpen) {
+export function homeStackOpacity (homeStackState) {
   return useDerivedValue(
     function () {
       'worklet'
-      return withTiming(homeStackOpen.value ? 1 : 0, defaultDurationAndEasing);
+      switch (homeStackState.value) {
+      case OPEN_WITH_ANIMATION:
+	return withTiming(1, defaultDurationAndEasing);
+	break;
+      case CLOSE_WITH_ANIMATION:
+	return withTiming(0, defaultDurationAndEasing);
+	break;
+      case OPEN_WITHOUT_ANIMATION:
+	return 1;
+	break;
+      case CLOSE_WITHOUT_ANIMATION:
+	return 0;
+	break;	
+      }
     }
   );
 }
 
-export function homeStackTop (homeStackOpen, top) {
+export function homeStackTop (homeStackState, top) {
   return useDerivedValue(
     function () {
       'worklet'
-      return withTiming(homeStackOpen.value ? 0 : top, defaultDurationAndEasing);
+      switch (homeStackState.value) {
+      case OPEN_WITH_ANIMATION:
+	return withTiming(0, defaultDurationAndEasing);
+	break;
+      case CLOSE_WITH_ANIMATION:
+	return withTiming(top, defaultDurationAndEasing);
+	break;
+      case OPEN_WITHOUT_ANIMATION:
+	return 0;
+	break;
+      case CLOSE_WITHOUT_ANIMATION:
+	return top;
+	break;	
+      }
     }
   );
 }
 
-export function homeStackLeft (selectedStackId, animateHomeStackLeft, homeStackOpen, left) {
+export function homeStackLeft (selectedStackId, animateHomeStackLeft, homeStackState, left) {
   return useDerivedValue(
     function () {
       'worklet'
       if (animateHomeStackLeft.value) {
 	var leftValue = left[selectedStackId.value];
-	if (homeStackOpen.value) {
+	switch (homeStackState.value) {
+	case OPEN_WITH_ANIMATION:
 	  return withSequence(withTiming(leftValue, {duration: 0}), withTiming(0, defaultDurationAndEasing))
-	} else {
+	  break;
+	case CLOSE_WITH_ANIMATION:
 	  return withTiming(leftValue, defaultDurationAndEasing);
+	  break;
+	case OPEN_WITHOUT_ANIMATION:
+	  return 0;
+	  break;
+	case CLOSE_WITHOUT_ANIMATION:
+	  return leftValue;
+	  break;	
 	}
       } else {
 	return 0;
@@ -115,20 +182,35 @@ export function homeStackLeft (selectedStackId, animateHomeStackLeft, homeStackO
   );
 }
 
-export function homeStackPointer (homeStackOpen) {
+export function homeStackPointer (homeStackState) {
   return useDerivedValue(
     function () {
       'worklet'
-      return homeStackOpen.value ? "auto" : "none";
+      var homeStackStateValue = homeStackState.value;
+      return (homeStackStateValue == OPEN_WITH_ANIMATION ||
+	      homeStackStateValue == OPEN_WITHOUT_ANIMATION) ? "auto" : "none";
     }
   );
 }
 
-export function homeStackScale (homeStackOpen, minimizeScale) {
+export function homeStackScale (homeStackState, minimizeScale) {
   return useDerivedValue(
     function () {
       'worklet'
-      return withTiming(homeStackOpen.value ? 1 : minimizeScale, defaultDurationAndEasing);
+      switch (homeStackState.value) {
+      case OPEN_WITH_ANIMATION:
+	return withTiming(1, defaultDurationAndEasing);
+	break;
+      case CLOSE_WITH_ANIMATION:
+	return withTiming(minimizeScale, defaultDurationAndEasing);
+	break;
+      case OPEN_WITHOUT_ANIMATION:
+	return 1;
+	break;
+      case CLOSE_WITHOUT_ANIMATION:
+	return minimizeScale;
+	break;	
+      }
     }
   );
 }
