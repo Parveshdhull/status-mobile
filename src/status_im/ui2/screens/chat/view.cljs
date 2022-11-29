@@ -80,7 +80,8 @@
      [messages/messages-view
       {:chat                             chat
        :mutual-contact-requests-enabled? mutual-contact-requests-enabled?
-       :show-input?                      show-input?}]
+       :show-input?                      show-input?
+       :bottom-space                     15}]
      ;;INPUT COMPOSER
      (when show-input?
        [composer/composer chat-id])
