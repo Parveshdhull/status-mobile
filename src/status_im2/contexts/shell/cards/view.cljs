@@ -1,46 +1,39 @@
 (ns status-im2.contexts.shell.cards.view
-  (:require [i18n.i18n :as i18n]
+  (:require [quo2.core :as quo]
+            [i18n.i18n :as i18n]
             [react-native.core :as rn]
             [clojure.string :as string]
             [quo2.foundations.colors :as colors]
             [react-native.fast-image :as fast-image]
-            [quo2.components.markdown.text :as text]
-            [quo2.components.buttons.button :as button]
-            [quo2.components.counter.counter :as counter]
             [status-im2.contexts.shell.cards.style :as style]
-            [quo2.components.tags.status-tags :as status-tags]
-            [status-im2.contexts.shell.constants :as constants]
-            [quo2.components.avatars.user-avatar :as user-avatar]
-            [quo2.components.avatars.group-avatar :as group-avatar]
-            [quo2.components.list-items.preview-list :as preview-list]
-            [quo2.components.avatars.channel-avatar :as channel-avatar]))
+            [status-im2.contexts.shell.constants :as constants]))
 
 (defn content-container [{:keys [content-type data new-notifications? color-50]}]
   [rn/view {:style (style/content-container new-notifications?)}
    ;; TODO - Use status-im.constants for content type
    (case content-type
-     :text [text/text (style/last-message-text-props) data]
-     :photo [preview-list/preview-list {:type               :photo
-                                        :more-than-99-label (i18n/label :counter-99-plus)
-                                        :size               24
-                                        :override-theme     :dark} data]
+     :text [quo/text style/last-message-text-props data]
+     :photo [quo/preview-list {:type               :photo
+                               :more-than-99-label (i18n/label :counter-99-plus)
+                               :size               24
+                               :override-theme     :dark} data]
      :sticker [fast-image/fast-image {:source (:source data)
-                                      :style  (style/sticker)}]
+                                      :style  style/sticker}]
      :gif [fast-image/fast-image {:source (:source data)
-                                  :style  (style/gif)}]
+                                  :style  style/gif}]
      :channel [rn/view {:style {:flex-direction :row
                                 :align-items    :center}}
-               [channel-avatar/channel-avatar
+               [quo/channel-avatar
                 {:emoji                  (:emoji data)
                  :emoji-background-color (colors/alpha color-50 0.1)}]
-               [text/text (style/community-channel-props) (:channel-name data)]]
+               [quo/text style/community-channel-props (:channel-name data)]]
      :community-info (case (:type data)
-                       :pending      [status-tags/status-tag
+                       :pending      [quo/status-tag
                                       {:status         {:type :pending}
                                        :label          (i18n/label :t/pending)
                                        :size           :small
                                        :override-theme :dark}]
-                       :kicked      [status-tags/status-tag
+                       :kicked      [quo/status-tag
                                      {:status         {:type :negative}
                                       :size           :small
                                       :override-theme :dark
@@ -50,11 +43,11 @@
      [:<>])])
 
 (defn notification-container [{:keys [notification-indicator counter-label color-60]}]
-  [rn/view {:style (style/notification-container)}
+  [rn/view {:style style/notification-container}
    (if (= notification-indicator :counter)
-     [counter/counter {:outline             false
-                       :override-text-color colors/white
-                       :override-bg-color   color-60} counter-label]
+     [quo/counter {:outline             false
+                   :override-text-color colors/white
+                   :override-bg-color   color-60} counter-label]
      [rn/view {:style (style/unread-dot color-60)}])])
 
 (defn bottom-container [{:keys [new-notifications?] :as content}]
@@ -66,16 +59,16 @@
 (defn avatar [avatar-params type customization-color]
   (case type
     constants/one-to-one-chat-card
-    [user-avatar/user-avatar
+    [quo/user-avatar
      (merge {:ring?             false
              :size              :medium
              :status-indicator? false}
             avatar-params)]
 
     constants/private-group-chat-card
-    [group-avatar/group-avatar {:color          customization-color
-                                :size           :large
-                                :override-theme :dark}]
+    [quo/group-avatar {:color          customization-color
+                       :size           :large
+                       :override-theme :dark}]
 
     constants/community-card
     (if (:source avatar-params)
@@ -84,9 +77,9 @@
         :style  (style/community-avatar customization-color)}]
       ;; TODO - Update to fall back community avatar once designs are available
       [rn/view {:style (style/community-avatar customization-color)}
-       [text/text {:weight :semi-bold
-                   :size   :heading-2
-                   :style  {:color colors/white-opa-70}}
+       [quo/text {:weight :semi-bold
+                  :size   :heading-2
+                  :style  {:color colors/white-opa-70}}
         (string/upper-case (first (:name avatar-params)))]])))
 
 (defn subtitle [{:keys [content-type data]}]
@@ -113,14 +106,14 @@
       (when banner
         [rn/image {:source (:source banner)
                    :style  {:width  160}}])
-      [rn/view {:style (style/secondary-container)}
-       [text/text (style/title-props) title]
-       [text/text (style/subtitle-props) (subtitle content)]
+      [rn/view {:style style/secondary-container}
+       [quo/text style/title-props title]
+       [quo/text style/subtitle-props (subtitle content)]
        [bottom-container (merge {:color-50 color-50 :color-60 color-60} content)]]
       (when avatar-params
-        [rn/view {:style (style/avatar-container)}
+        [rn/view {:style style/avatar-container}
          [avatar avatar-params type customization-color]])
-      [button/button (style/close-button-props on-close) :i/close]]]))
+      [quo/button (style/close-button-props on-close) :i/close]]]))
 
 ;; browser Card
 (defn browser-card [_]

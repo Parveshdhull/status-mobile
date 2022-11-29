@@ -1,7 +1,6 @@
 (ns status-im2.contexts.shell.constants
   (:require [react-native.platform :as platform]
             [utils.re-frame :as rf]
-            [reagent.core :as reagent]
             [react-native.core :as rn]))
 
 (def shell-animation-time 200)
@@ -43,10 +42,6 @@
    :chats-stack       :chats-tab-icon-opacity
    :wallet-stack      :wallet-tab-icon-opacity
    :browser-stack     :browser-tab-icon-opacity})
-
-;; TODO - Use dynamic pass-through for transparent bottom tabs,
-;; instead of hard coding value
-(def pass-through? (reagent/atom false))
 
 ;; Home stack states
 

@@ -16,7 +16,7 @@
    :border-radius    16
    :background-color (colors/alpha background-color 0.4)})
 
-(defn secondary-container []
+(def secondary-container
   {:width            160
    :height           120
    :border-radius    16
@@ -24,29 +24,29 @@
    :position         :absolute
    :background-color (:secondary-container-bg-color colors-map)})
 
-(defn title []
+(def title
   {:position          :absolute
    :top               28
    :margin-horizontal 12
    :color             (:title-color colors-map)})
 
-(defn title-props []
+(def title-props
   {:size            :paragraph-1
    :weight          :semi-bold
    :number-of-lines 1
    :ellipsize-mode  :tail
-   :style           (title)})
+   :style           title})
 
-(defn subtitle []
+(def subtitle
   {:position          :absolute
    :top               50
    :margin-horizontal 12
    :color             (:subtitle-color colors-map)})
 
-(defn subtitle-props []
+(def subtitle-props
   {:size            :paragraph-2
    :weight          :medium
-   :style           (subtitle)})
+   :style           subtitle})
 
 (defn content-container [new-notifications?]
   {:position          :absolute
@@ -56,7 +56,7 @@
    :margin-left       12
    :margin-right      (if new-notifications? 8 12)})
 
-(defn notification-container []
+(def notification-container
   {:position        :absolute
    :width           20
    :height          20
@@ -65,17 +65,17 @@
    :justify-content :center
    :align-items     :center})
 
-(defn last-message-text []
+(def last-message-text
   {:color (:last-message-text-color colors-map)})
 
-(defn last-message-text-props []
+(def last-message-text-props
   {:size            :paragraph-2
    :weight          :regular
    :number-of-lines 1
    :ellipsize-mode  :tail
-   :style           (last-message-text)})
+   :style           last-message-text})
 
-(defn close-button []
+(def close-button
   {:position         :absolute
    :right            8
    :top              8
@@ -88,9 +88,9 @@
    :icon           true
    :on-press       on-press
    :override-theme :dark
-   :style          (close-button)})
+   :style          close-button})
 
-(defn avatar-container []
+(def avatar-container
   {:width           48
    :height          48
    :left            12
@@ -110,11 +110,11 @@
 
 ;; Supporting Components
 
-(defn sticker []
+(def sticker
   {:width  24
    :height 24})
 
-(defn gif []
+(def gif
   {:width         24
    :height        24
    :border-radius 8})
@@ -130,11 +130,11 @@
                       (or customization-color :primary)
                       60)})
 
-(defn community-channel []
+(def community-channel
   {:margin-left 8
    :color       (:community-channel colors-map)})
 
-(defn community-channel-props []
+(def community-channel-props
   {:size            :paragraph-2
    :weight          :medium
    :number-of-lines 1

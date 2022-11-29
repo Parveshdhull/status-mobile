@@ -20,7 +20,7 @@
   [:f>
    (fn []
      (let [shared-values  @animation/shared-values-atom
-           original-style (styles/bottom-tabs-container false)
+           original-style (styles/bottom-tabs-container @animation/pass-through?)
            animated-style (reanimated/apply-animations-to-style
                            {:height (:bottom-tabs-height shared-values)}
                            original-style)]

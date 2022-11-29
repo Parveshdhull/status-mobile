@@ -1,15 +1,15 @@
 (ns status-im2.contexts.shell.view
-  (:require [i18n.i18n :as i18n]
+  (:require [quo2.core :as quo]
+            [i18n.i18n :as i18n]
+            [utils.re-frame :as rf]
             [react-native.core :as rn]
+            [quo2.foundations.colors :as colors]
             [react-native.safe-area :as safe-area]
-            [quo2.core :as quo]
+            [status-im2.common.home.view :as common.home]
             [status-im2.contexts.shell.constants :as constants]
             [status-im2.contexts.shell.animation :as animation]
             [status-im2.contexts.shell.home-stack :as home-stack]
             [status-im2.contexts.shell.bottom-tabs :as bottom-tabs]
-            [re-frame.core :as re-frame]
-            [quo2.foundations.colors :as colors]
-            [status-im2.common.home.view :as common.home]
             [status-im2.contexts.shell.cards.view :as switcher-cards]))
 
 ;; TODO
@@ -53,17 +53,17 @@
 (defn render-card [{:keys [id type content] :as card}]
   (let [card-data (case type
                     constants/one-to-one-chat-card
-                    @(re-frame/subscribe [:shell/one-to-one-chat-card id])
+                    (rf/sub [:shell/one-to-one-chat-card id])
 
                     constants/private-group-chat-card
-                    @(re-frame/subscribe [:shell/private-group-chat-card id])
+                    (rf/sub [:shell/private-group-chat-card id])
 
                     constants/community-card
                     (if content
-                      @(re-frame/subscribe [:shell/community-channel-card
-                                            id (get-in content [:data :channel-id])
-                                            content])
-                      @(re-frame/subscribe [:shell/community-card id])))]
+                      (rf/sub [:shell/community-channel-card
+                               id (get-in content [:data :channel-id])
+                               content])
+                      (rf/sub [:shell/community-card id])))]
     [switcher-cards/card (merge card card-data)]))
 
 (defn jump-to-list [switcher-cards shell-margin]
@@ -85,8 +85,8 @@
     [placeholder]))
 
 (defn shell []
-  (let [switcher-cards @(re-frame/subscribe [:shell/sorted-switcher-cards])
-        width          @(re-frame/subscribe [:dimensions/window-width])
+  (let [switcher-cards (rf/sub [:shell/sorted-switcher-cards])
+        width          (rf/sub [:dimensions/window-width])
         shell-margin   (/ (- width 320) 3)] ;; 320 - two cards width
     [safe-area/consumer
      (fn [insets]

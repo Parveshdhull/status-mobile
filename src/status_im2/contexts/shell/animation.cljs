@@ -11,7 +11,7 @@
 ;; Atoms
 (def selected-stack-id (atom nil))
 (def home-stack-state (atom constants/close-with-animation))
-(def pass-through? (atom false))
+(def pass-through? (atom false)) ;; TODO - Use dynamic pass-through for transparent bottom tabs
 (def shared-values-atom (atom nil))
 
 ;; Reagent atoms used for lazily loading home screen tabs
