@@ -7,7 +7,7 @@
 
 (defn status-bar-options
   []
-  (let [dark-mode? (if (= @state/root-id :shell-stack) (colors/dark?) (utils.theme/dark-mode?))]
+  (let [dark-mode? (if (= @state/root-id :shell-stack) (colors/dark?) true)]
     (if platform/android?
       {:navigationBar {:backgroundColor colors/neutral-100}
        :statusBar     {:backgroundColor :transparent

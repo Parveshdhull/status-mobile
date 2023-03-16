@@ -51,7 +51,7 @@
    :char-limit :on-char-limit-reach :icon-name])
 
 (defn- base-input
-  [{:keys [on-change-text on-char-limit-reach]}]
+  [{:keys [on-change-text on-char-limit-reach accessibility-label]}]
   (let [status              (reagent/atom :default)
         on-focus            #(reset! status :focus)
         on-blur             #(reset! status :default)
@@ -78,7 +78,7 @@
             colors-by-status (get-in style/status-colors [variant status-path])
             variant-colors   (style/variants-colors variant)
             clean-props      (apply dissoc props custom-props)]
-        [rn/view
+        [:<>
          (when (or label char-limit)
            [label-&-counter
             {:variant-colors variant-colors
@@ -97,6 +97,8 @@
                     :cursor-color           (:cursor variant-colors)
                     :editable               (not disabled)
                     :on-focus               on-focus
+                    :accessibility-label    accessibility-label
+                    :accessible             true
                     :on-blur                on-blur}
              :always    (merge clean-props)
              multiline  (assoc :on-content-size-change set-multiple-lines!)
