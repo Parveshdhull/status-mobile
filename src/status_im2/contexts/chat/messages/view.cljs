@@ -3,26 +3,14 @@
             [re-frame.db]
             [react-native.core :as rn]
             [react-native.safe-area :as safe-area]
-            [reagent.core :as reagent]
             [status-im2.constants :as constants]
             [status-im2.contexts.chat.composer.view :as composer]
             [status-im2.contexts.chat.messages.contact-requests.bottom-drawer :as
              contact-requests.bottom-drawer]
             [status-im2.contexts.chat.messages.list.view :as messages.list]
             [status-im2.contexts.chat.messages.pin.banner.view :as pin.banner]
-            [status-im2.navigation.state :as navigation.state]
             [utils.debounce :as debounce]
             [utils.re-frame :as rf]))
-
-(defn navigate-back-handler
-  []
-  (when (and (not @navigation.state/curr-modal) (= (get @re-frame.db/app-db :view-id) :chat))
-    (rn/hw-back-remove-listener navigate-back-handler)
-    (rf/dispatch [:chat/close])
-    (rf/dispatch [:navigate-back])
-    ;; If true is not returned back button event will bubble up,
-    ;; and will call system back button action
-    true))
 
 (defn page-nav
   []
@@ -52,9 +40,7 @@
                                 :on-press  #(debounce/dispatch-and-chill [:chat.ui/show-profile chat-id]
                                                                          1000)})
 
-      :left-section          {:on-press            #(do
-                                                      (rf/dispatch [:chat/close])
-                                                      (rf/dispatch [:navigate-back]))
+      :left-section          {:on-press            #(rf/dispatch [:navigate-back])
                               :icon                :i/arrow-left
                               :accessibility-label :back-button}
 
@@ -64,28 +50,26 @@
                                :icon                :i/options
                                :accessibility-label :options-button}]}]))
 
-(defn chat-render
+(defn load-composer
+  [insets chat-type]
+  (let [shell-animation-complete? (rf/sub [:shell/animation-complete? chat-type])]
+    (when shell-animation-complete?
+      [:f> composer/composer insets])))
+
+(defn chat
   []
   (let [;;NOTE: we want to react only on these fields, do not use full chat map here
-        {:keys [chat-id contact-request-state group-chat able-to-send-message?] :as chat}
+        {:keys [chat-id contact-request-state group-chat able-to-send-message? chat-type] :as chat}
         (rf/sub [:chats/current-chat-chat-view])
         insets (safe-area/get-insets)]
     [rn/keyboard-avoiding-view
-     {:style                  {:position :relative :flex 1}
-      :keyboardVerticalOffset (- (:bottom insets))}
+     {:style                    {:flex       1
+                                 :margin-top (:top insets)}
+      :keyboard-vertical-offset (- (:bottom insets))
+      :behavior                 :height}
      [page-nav]
      [pin.banner/banner chat-id]
      [messages.list/messages-list chat insets]
      (if-not able-to-send-message?
        [contact-requests.bottom-drawer/view chat-id contact-request-state group-chat]
-       [:f> composer/composer insets])]))
-
-
-(defn chat
-  []
-  (reagent/create-class
-   {:component-did-mount    (fn []
-                              (rn/hw-back-remove-listener navigate-back-handler)
-                              (rn/hw-back-add-listener navigate-back-handler))
-    :component-will-unmount (fn [] (rn/hw-back-remove-listener navigate-back-handler))
-    :reagent-render         chat-render}))
+       [load-composer insets chat-type])]))

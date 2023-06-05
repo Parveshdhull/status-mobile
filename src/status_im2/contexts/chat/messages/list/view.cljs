@@ -75,10 +75,10 @@
   (reset! messages-view-height (oops/oget evt "nativeEvent.layout.height")))
 
 (defn list-footer
-  [{:keys [chat-id]}]
+  [{:keys [chat-id]} shell-animation-complete?]
   (let [loading-messages? (rf/sub [:chats/loading-messages? chat-id])
         all-loaded?       (rf/sub [:chats/all-loaded? chat-id])]
-    (when (or loading-messages? (not chat-id) (not all-loaded?))
+    (when (or (not shell-animation-complete?) loading-messages? (not chat-id) (not all-loaded?))
       [rn/view {:style (when platform/android? {:scaleY -1})}
        [quo/skeleton @messages-view-height]])))
 
@@ -103,11 +103,14 @@
           [message/message-with-reactions message-data context keyboard-shown])]))])
 
 (defn messages-list-content
-  [{:keys [chat-id] :as chat} insets keyboard-shown]
+  [{:keys [chat-id chat-type] :as chat} insets keyboard-shown]
   (fn []
-    (let [context    (rf/sub [:chats/current-chat-message-list-view-context])
-          messages   (rf/sub [:chats/raw-chat-messages-stream chat-id])
-          recording? (rf/sub [:chats/recording?])]
+    (let [shell-animation-complete? (rf/sub [:shell/animation-complete? chat-type])
+          context                   (when shell-animation-complete?
+                                      (rf/sub [:chats/current-chat-message-list-view-context]))
+          messages                  (when shell-animation-complete?
+                                      (rf/sub [:chats/raw-chat-messages-stream chat-id]))
+          recording?                (when shell-animation-complete? (rf/sub [:chats/recording?]))]
       [rn/view
        {:style {:flex 1}}
        ;; NOTE: DO NOT use anonymous functions for handlers
@@ -115,7 +118,7 @@
         {:key-fn                       list-key-fn
          :ref                          list-ref
          :header                       [list-header chat]
-         :footer                       [list-footer chat]
+         :footer                       [list-footer chat shell-animation-complete?]
          :data                         messages
          :render-data                  {:context        context
                                         :keyboard-shown keyboard-shown}

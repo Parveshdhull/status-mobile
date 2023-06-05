@@ -88,7 +88,7 @@
   (let [chat-id "test_chat"
         db      {:pagination-info {chat-id {:all-loaded? true}}}]
     (testing "Pagination info should be reset on navigation"
-      (let [res (chat/navigate-to-chat {:db db} chat-id)]
+      (let [res (chat/navigate-to-chat {:db db} chat-id nil)]
         (is (nil? (get-in res [:db :pagination-info chat-id :all-loaded?])))))))
 
 (deftest camera-roll-loading-more-test
